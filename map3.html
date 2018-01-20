@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Marker Labels</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmf0jwZcaQWyvlVgX3gMRbCupQ4K2jmhA"></script>
+    <script>
+      // In the following example, markers appear when the user clicks on the map.
+      // Each marker is labeled with a single alphabetical character.
+        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var labelIndex = 0;
+        var bangalore = {};
+        var placeArray = []; //where places are stored
+        var infowindow;
+        var places; //things to put in placeArray
+        var marker;
+
+        function initialize() {
+            //initializes the map on center
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 17,
+                center: bangalore
+            });
+
+            // This event listener calls addMarker() when the map is clicked.
+            google.maps.event.addListener(map, 'click', function(event) {
+                addMarker(event.latLng, map);
+            });
+        }
+
+        // Adds a marker to the map.
+        function addMarker(location, map) {
+            // Add the marker at the clicked location, and add the next-available label from the array of alphabetical characters.
+            placeName = prompt("Please enter your Event", "Harry Potter");
+            var d = new Date();
+            timeStart = prompt("Start time",d.getHours()+':'+d.getMinutes());
+            timeEnd = prompt("End time",d.getHours()+2+':'+d.getMinutes());
+            places = new Object();
+            places.start = timeStart;
+            places.end = timeEnd;
+            places.name = placeName;
+            placeArray.push(places); //adds places to placeArray
+
+            infowindow=new google.maps.InfoWindow();
+            marker = new google.maps.Marker({
+                position: location,
+                label: labels[labelIndex++ % labels.length],
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', function() {
+                this.marker = marker;
+                infowindow.setContent(places.name +"<br />"+places.start +" - "+places.end+"<br/>"+'<button onclick="removeMarker(places,marker)">Finished</button>');
+                infowindow.open(map, this);
+                marker.Circle = new google.maps.Circle({
+                    center:location,
+                    radius: 100,
+                    map: map
+                });
+                marker.Circle.bindTo('map', marker);
+
+            });
+        }
+
+
+        function removeMarker(places,marker) {
+            marker.setMap(null);
+            placeArray.splice(placeArray.indexOf(places),1);
+        }
+
+
+        google.maps.event.addDomListener(window, 'load', getLocation);
+
+        function onSuccess(position) {
+            var latVar = position.coords.latitude
+            var longVar = position.coords.longitude
+            bangalore = {lat: latVar, lng: longVar};
+            var mapProp= {
+                center:new google.maps.LatLng(latVar,longVar),
+                zoom:1,
+            };
+            initialize();
+
+        };
+
+        // onError Callback receives a PositionError object
+        function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+        }
+
+        function getLocation() {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
