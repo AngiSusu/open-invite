@@ -23,13 +23,13 @@
       // Each marker is labeled with a single alphabetical character.
       var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var labelIndex = 0;
-
+      var bangalore = {};
       function initialize() {
-        getLocation();
+
           
-        var bangalore = { lat: 0, lng: 0 };
+        
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
+          zoom: 17,
           center: bangalore
         });
 
@@ -53,17 +53,20 @@
         });
       }
 
-      google.maps.event.addDomListener(window, 'load', initialize);
+      google.maps.event.addDomListener(window, 'load', getLocation);
     function onSuccess(position) {
-            var latVar = position.coords.latitude.toFixed(2)
-            var longVar = position.coords.longitude.toFixed(2)
-            
+            var latVar = position.coords.latitude
+            var longVar = position.coords.longitude
+            bangalore = {lat: latVar, lng: longVar};
+
 
             var mapProp= {
             center:new google.maps.LatLng(latVar,longVar),
-            zoom:19,
+            zoom:1,
             };
-            var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+            initialize();
+//            var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        
     };
 
     // onError Callback receives a PositionError object
