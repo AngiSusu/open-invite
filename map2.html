@@ -85,12 +85,13 @@
             var endH = parseInt(places.end.substring(0,places.end.indexOf(":")));
             
             var endM = parseInt(places.end.substring(places.end.indexOf(":")+1));
-            var time = (endH - d.getHours())
-            window.alert(endM);
+            var timer = (endH - d.getHours())*3600+(endM-d.getMinutes())*60;
+            
+            window.alert(timer);
             setTimeout(function () {
                 marker.setMap(null);
                 delete marker;
-            }, 10000);
+            }, timer*1000);
         }
 
 
