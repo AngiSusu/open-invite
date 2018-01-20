@@ -75,6 +75,15 @@
                 marker.Circle.bindTo('map', marker);
 
             });
+            
+            var endH = parseInt(places.end.substring(0,places.end.indexOf(":")));
+            
+            var endM = parseInt(places.end.substring(places.end.indexOf(":")+1));
+            window.alert(endM);
+            setTimeout(function () {
+                marker.setMap(null);
+                delete marker;
+            }, 10000);
         }
 
 
