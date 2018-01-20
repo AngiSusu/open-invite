@@ -24,6 +24,10 @@
       var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       var labelIndex = 0;
       var bangalore = {};
+         var placeArray = [];
+    var infowindow;
+        var places;
+        var marker;
       function initialize() {
 
           
@@ -46,16 +50,40 @@
       function addMarker(location, map) {
         // Add the marker at the clicked location, and add the next-available label
         // from the array of alphabetical characters.
-        place = prompt("Please enter your Event", "Harry Potter");
+        placeName = prompt("Please enter your Event", "Harry Potter");
         var d = new Date();
         timeStart = prompt("Start time",d.getHours()+':'+d.getMinutes());
         timeEnd = prompt("End time",d.getHours()+2+':'+d.getMinutes());
-        var marker = new google.maps.Marker({
+          places = new Object();
+          places.start = timeStart;
+          places.end = timeEnd;
+          places.name = placeName;
+          placeArray.push(places);
+          
+          infowindow=new google.maps.InfoWindow();
+          marker = new google.maps.Marker({
           position: location,
           label: labels[labelIndex++ % labels.length],
           map: map
         });
+        google.maps.event.addListener(marker, 'click', function() {
+          this.marker = marker;
+            infowindow.setContent(places.name +"<br />"+places.start +" - "+places.end+"<br/>"+'<button onclick="removeMarker(places,marker)">Finished</button>');
+            infowindow.open(map, this);
+            marker.Circle = new google.maps.Circle({
+              center:location,
+              radius: 100,
+              map: map
+            });
+            marker.Circle.bindTo('map', marker);
+          
+        });
       }
+        function removeMarker(places,marker) {
+            marker.setMap(null);
+            placeArray.splice(placeArray.indexOf(places),1);
+        }
+        
 
       google.maps.event.addDomListener(window, 'load', getLocation);
     function onSuccess(position) {
