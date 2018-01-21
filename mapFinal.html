@@ -17,6 +17,20 @@
         padding: 0;
       }
     </style>
+    
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCH03gxLHosCus0XY3RfS1Qb9JdZPixu5c",
+        authDomain: "open-invite-da351.firebaseapp.com",
+        databaseURL: "https://open-invite-da351.firebaseio.com",
+        projectId: "open-invite-da351",
+        storageBucket: "",
+        messagingSenderId: "944058678940"
+      };
+      firebase.initializeApp(config);
+    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmf0jwZcaQWyvlVgX3gMRbCupQ4K2jmhA"></script>
     <script>
       // In the following example, markers appear when the user clicks on the map.
@@ -40,6 +54,8 @@
                 map: map,
                 animation: google.maps.Animation.DROP
             });
+            
+            
             var myCircle = new google.maps.Circle({
                     center:bangalore,
                     radius: dist,
@@ -52,6 +68,15 @@
             // This event listener calls addMarker() when the map is clicked.
             google.maps.event.addListener(map, 'click', function(event) {
                 addMarker(event.latLng, map);
+            });
+            var infowindows=new google.maps.InfoWindow();
+            google.maps.event.addListener(me, 'click', function() {
+                this.marker = marker;
+                infowindows.setContent('<button >Refresh</button>');
+                infowindows.open(map, this);
+                
+                
+
             });
 
             // Add a marker at the center of the map.
@@ -95,6 +120,7 @@
             var endM = parseInt(places.end.substring(places.end.indexOf(":")+1));
             var timer = (endH - d.getHours())*3600+(endM-d.getMinutes())*60;
             setTimeout(function () {
+                placeArray.splice(placeArray.indexOf(places),1);
                 marker.setMap(null);
                 delete marker;
             }, timer*1000);
