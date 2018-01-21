@@ -94,8 +94,6 @@
             
             var endM = parseInt(places.end.substring(places.end.indexOf(":")+1));
             var timer = (endH - d.getHours())*3600+(endM-d.getMinutes())*60;
-            
-            window.alert(timer);
             setTimeout(function () {
                 marker.setMap(null);
                 delete marker;
