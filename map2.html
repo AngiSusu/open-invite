@@ -26,11 +26,13 @@
         var bangalore = {};
         var placeArray = [];
         var infowindow;
-        var places;
+        var places = new Object();
         var marker;
+        var dist;
         function initialize() {
+            
             var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 17,
+                zoom: 16,
                 center: bangalore
             });
             var me = new google.maps.Marker({
@@ -38,6 +40,14 @@
                 map: map,
                 animation: google.maps.Animation.DROP
             });
+            var myCircle = new google.maps.Circle({
+                    center:bangalore,
+                    radius: dist,
+                    map: map,
+                    clickable: false
+                });
+            myCircle.bindTo('center', me,'position');
+        
 
             // This event listener calls addMarker() when the map is clicked.
             google.maps.event.addListener(map, 'click', function(event) {
@@ -52,11 +62,13 @@
         function addMarker(location, map) {
             // Add the marker at the clicked location, and add the next-available label
             // from the array of alphabetical characters.
-            placeName = prompt("Please enter your Event", "Harry Potter");
+            var placeName = prompt("Please enter your Event", "Harry Potter");
+            if (placeName === null) return;
             var d = new Date();
-            timeStart = prompt("Start time",d.getHours()+':'+d.getMinutes());
-            timeEnd = prompt("End time",d.getHours()+2+':'+d.getMinutes());
-            places = new Object();
+            var timeStart = prompt("Start time",d.getHours()+':'+d.getMinutes());
+            if (timeStart === null) return;
+            var timeEnd = prompt("End time",d.getHours()+2+':'+d.getMinutes());
+            if (timeEnd === null) return;
             places.start = timeStart;
             places.end = timeEnd;
             places.name = placeName;
@@ -73,12 +85,8 @@
                 this.marker = marker;
                 infowindow.setContent(places.name +"<br />"+places.start +" - "+places.end+"<br/>"+'<button onclick="removeMarker(places,marker)">Finished</button>');
                 infowindow.open(map, this);
-                marker.Circle = new google.maps.Circle({
-                    center:location,
-                    radius: 100,
-                    map: map
-                });
-                marker.Circle.bindTo('map', marker);
+                
+                
 
             });
             
@@ -111,6 +119,7 @@
                 center:new google.maps.LatLng(latVar,longVar),
                 zoom:1,
             };
+            dist = parseInt(prompt("How far do you want to go?"));
             initialize();
 
         };
